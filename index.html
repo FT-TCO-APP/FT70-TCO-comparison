@@ -339,6 +339,7 @@
       </div>
       <div class="scenario-pills">
         <span class="pill">5,000 cremations / year</span>
+        <span class="pill">Gas price: €0.075/m³</span>
         <span class="pill">Fixed assumptions</span>
       </div>
     </section>
@@ -383,11 +384,11 @@
           </div>
           <div class="mmetric">
             <div class="mmetric-label">Gas consumption</div>
-            <div class="mmetric-value">130 <span class="mmetric-unit">kWh/crem.</span></div>
+            <div class="mmetric-value">120 <span class="mmetric-unit">kWh/crem.</span></div>
           </div>
           <div class="mmetric">
             <div class="mmetric-label">Annual gas</div>
-            <div class="mmetric-value">650,000 <span class="mmetric-unit">kWh/year</span></div>
+            <div class="mmetric-value">600,000 <span class="mmetric-unit">kWh/year</span></div>
           </div>
         </div>
       </article>
@@ -397,12 +398,12 @@
       <article class="kpi good">
         <div class="kpi-label">Break-even vs Average Competitor</div>
         <div class="kpi-value" id="breakEvenValue">—</div>
-        <div class="kpi-sub">Higher FT70 investment recovered through lower gas consumption.</div>
+        <div class="kpi-sub">Recovery of the higher FT70 investment through lower gas consumption.</div>
       </article>
       <article class="kpi good">
-        <div class="kpi-label">25-Year TCO Saving with FT70</div>
+        <div class="kpi-label">25-Year TCO Difference</div>
         <div class="kpi-value" id="saving25Value">—</div>
-        <div class="kpi-sub">Cumulative difference between the two fixed TCO trajectories.</div>
+        <div class="kpi-sub" id="tcoDifferenceSub">Cumulative difference between the two fixed TCO trajectories.</div>
       </article>
       <article class="kpi">
         <div class="kpi-label">Annual Gas Reduction</div>
@@ -423,7 +424,7 @@
         <div class="legend">
           <div class="legend-item"><span class="legend-line" style="background:#38bdf8"></span> FT70</div>
           <div class="legend-item"><span class="legend-line" style="background:#f59e0b"></span> Average Competitor</div>
-          <div class="legend-item"><span class="legend-line" style="background:#34d399; height:2px; border-top:1px dashed #34d399; background:transparent"></span> Break-even</div>
+          <div class="legend-item" id="breakEvenLegend"><span class="legend-line" style="background:#34d399; height:2px; border-top:1px dashed #34d399; background:transparent"></span> Break-even</div>
         </div>
       </article>
 
@@ -451,7 +452,7 @@
 
   <footer>
     <span>Facultatieve Technologies © 2026 · FT70 TCO Comparison</span>
-    <span>Assumptions: 5,000 cremations/year · Fixed investment &amp; gas consumption</span>
+    <span>Assumptions: 5,000 cremations/year · Gas price €0.075/m³ · Fixed investment &amp; gas consumption</span>
   </footer>
 
   <script>
@@ -463,35 +464,10 @@
         ft70Capex: 265000,
         competitorCapex: 160000,
         ft70GasKwhPerCremation: 80,
-        competitorGasKwhPerCremation: 130,
-        startYear: 2026,
-        gasPricesEurPerKwh: Object.freeze([
-          0.12265240000000001,
-          0.111755206,
-          0.1000937932,
-          0.10309660699600001,
-          0.10618950520588001,
-          0.10937519036205641,
-          0.11265644607291811,
-          0.11603613945510566,
-          0.11951722363875883,
-          0.1231027403479216,
-          0.12679582255835925,
-          0.13059969723511003,
-          0.13451768815216333,
-          0.13855321879672824,
-          0.1427098153606301,
-          0.146991109821449,
-          0.15140084311609248,
-          0.15594286840957525,
-          0.1606211544618625,
-          0.16543978909571838,
-          0.17040298276858995,
-          0.17551507225164764,
-          0.18078052441919706,
-          0.18620394015177297,
-          0.19179005835632615
-        ])
+        competitorGasKwhPerCremation: 120,
+        gasPriceEurPerM3: 0.075,
+        gasKwhPerM3: 10.55,
+        horizonYears: 25
       });
 
       const eur0 = new Intl.NumberFormat('en-GB', {
@@ -513,14 +489,19 @@
       let ftCum = scenario.ft70Capex;
       let compCum = scenario.competitorCapex;
 
-      scenario.gasPricesEurPerKwh.forEach((gasPrice, i) => {
-        ftCum += annualFt70Kwh * gasPrice;
-        compCum += annualCompKwh * gasPrice;
+      const annualFt70M3 = annualFt70Kwh / scenario.gasKwhPerM3;
+      const annualCompM3 = annualCompKwh / scenario.gasKwhPerM3;
+      const annualFt70GasCost = annualFt70M3 * scenario.gasPriceEurPerM3;
+      const annualCompGasCost = annualCompM3 * scenario.gasPriceEurPerM3;
+
+      for (let i = 0; i < scenario.horizonYears; i++) {
+        ftCum += annualFt70GasCost;
+        compCum += annualCompGasCost;
         years.push(i + 1);
         ft70.push(ftCum);
         competitor.push(compCum);
         savings.push(compCum - ftCum);
-      });
+      }
 
       function computeBreakEven() {
         for (let y = 1; y < savings.length; y++) {
@@ -537,10 +518,17 @@
       const saving25 = savings[25];
 
       document.getElementById('breakEvenValue').textContent =
-        breakEven == null ? 'Not reached' : `${num1.format(breakEven)} years`;
-      document.getElementById('saving25Value').textContent = eur0.format(saving25);
+        breakEven == null ? 'Not reached within 25 years' : `${num1.format(breakEven)} years`;
+      document.getElementById('saving25Value').textContent =
+        saving25 >= 0 ? `${eur0.format(saving25)} saving` : `${eur0.format(Math.abs(saving25))} higher`;
+      document.getElementById('tcoDifferenceSub').textContent =
+        saving25 >= 0
+          ? 'FT70 cumulative TCO advantage at Year 25.'
+          : 'FT70 remains above the Average Competitor at Year 25.';
       document.getElementById('annualGasSavingValue').textContent = `${num0.format(annualSavingKwh)} kWh/year`;
       document.getElementById('gasReductionSub').textContent = `${num1.format(reductionPct)}% lower gas consumption with FT70.`;
+      const breakEvenLegend = document.getElementById('breakEvenLegend');
+      if (breakEvenLegend && breakEven == null) breakEvenLegend.style.display = 'none';
 
       const horizons = [5, 10, 15, 25];
       const tbody = document.getElementById('snapshotBody');
