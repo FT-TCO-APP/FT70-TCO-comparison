@@ -339,7 +339,7 @@
       </div>
       <div class="scenario-pills">
         <span class="pill">5,000 cremations / year</span>
-        <span class="pill">Gas price: €0.075/m³</span>
+        <span class="pill">Gas price: €0.075/kWh</span>
         <span class="pill">Fixed assumptions</span>
       </div>
     </section>
@@ -452,7 +452,7 @@
 
   <footer>
     <span>Facultatieve Technologies © 2026 · FT70 TCO Comparison</span>
-    <span>Assumptions: 5,000 cremations/year · Gas price €0.075/m³ · Fixed investment &amp; gas consumption</span>
+    <span>Assumptions: 5,000 cremations/year · Gas price €0.075/kWh · Fixed investment &amp; gas consumption</span>
   </footer>
 
   <script>
@@ -465,8 +465,7 @@
         competitorCapex: 160000,
         ft70GasKwhPerCremation: 80,
         competitorGasKwhPerCremation: 120,
-        gasPriceEurPerM3: 0.075,
-        gasKwhPerM3: 10.55,
+        gasPriceEurPerKwh: 0.075,
         horizonYears: 25
       });
 
@@ -489,10 +488,8 @@
       let ftCum = scenario.ft70Capex;
       let compCum = scenario.competitorCapex;
 
-      const annualFt70M3 = annualFt70Kwh / scenario.gasKwhPerM3;
-      const annualCompM3 = annualCompKwh / scenario.gasKwhPerM3;
-      const annualFt70GasCost = annualFt70M3 * scenario.gasPriceEurPerM3;
-      const annualCompGasCost = annualCompM3 * scenario.gasPriceEurPerM3;
+      const annualFt70GasCost = annualFt70Kwh * scenario.gasPriceEurPerKwh;
+      const annualCompGasCost = annualCompKwh * scenario.gasPriceEurPerKwh;
 
       for (let i = 0; i < scenario.horizonYears; i++) {
         ftCum += annualFt70GasCost;
