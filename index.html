@@ -1,620 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="FT70 vs Average Competitor — fixed TCO commercial comparison." />
-  <title>FT70 TCO Comparison</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FTA70 vs Average Competitor — fixed TCO commercial comparison.">
+  <title>FTA70 TCO Comparison</title>
   <style>
-    :root {
-      --bg: #08111f;
-      --bg2: #0d1728;
-      --panel: #111d30;
-      --panel2: #0c1728;
-      --border: #24344c;
-      --text: #f8fafc;
-      --muted: #9fb0c7;
-      --ft: #38bdf8;
-      --ft-soft: rgba(56,189,248,.12);
-      --comp: #f59e0b;
-      --comp-soft: rgba(245,158,11,.12);
-      --good: #34d399;
-      --good-soft: rgba(52,211,153,.12);
-      --shadow: 0 18px 50px rgba(0,0,0,.30);
-    }
-
-    * { box-sizing: border-box; }
-    html { background: var(--bg); }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 12% -10%, rgba(56,189,248,.15), transparent 34%),
-        radial-gradient(circle at 90% 0%, rgba(245,158,11,.08), transparent 26%),
-        linear-gradient(180deg, #07101d 0%, var(--bg) 55%, #070e19 100%);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      backdrop-filter: blur(14px);
-      background: rgba(7,16,29,.86);
-      border-bottom: 1px solid rgba(56,189,248,.25);
-    }
-
-    .topbar-inner {
-      max-width: 1460px;
-      margin: 0 auto;
-      padding: 14px 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-    }
-
-    .brand { display: flex; align-items: center; gap: 12px; }
-    .brand-mark {
-      width: 42px; height: 42px;
-      border-radius: 11px;
-      display: grid; place-items: center;
-      font-weight: 800; letter-spacing: -.03em;
-      background: linear-gradient(145deg, #38bdf8, #0284c7);
-      box-shadow: 0 0 24px rgba(56,189,248,.32);
-    }
-    .brand-title { font-size: 15px; font-weight: 750; letter-spacing: .01em; }
-    .brand-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-    .btn {
-      border: 0;
-      border-radius: 10px;
-      padding: 10px 15px;
-      color: #fff;
-      background: linear-gradient(135deg, #0284c7, #38bdf8);
-      font-weight: 750;
-      cursor: pointer;
-      box-shadow: 0 8px 22px rgba(2,132,199,.28);
-      transition: transform .18s ease, filter .18s ease;
-    }
-    .btn:hover { transform: translateY(-1px); filter: brightness(1.08); }
-
-    main {
-      width: min(1460px, calc(100% - 32px));
-      margin: 24px auto 28px;
-    }
-
-    .hero {
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 22px 24px;
-      background:
-        linear-gradient(120deg, rgba(56,189,248,.11), transparent 38%),
-        linear-gradient(300deg, rgba(245,158,11,.06), transparent 35%),
-        rgba(17,29,48,.86);
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::after {
-      content: "";
-      position: absolute;
-      width: 280px; height: 280px;
-      right: -90px; top: -130px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(56,189,248,.19), transparent 68%);
-      pointer-events: none;
-    }
-    .eyebrow {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .14em;
-      color: var(--ft);
-      font-weight: 800;
-    }
-    h1 {
-      margin: 6px 0 5px;
-      font-size: clamp(28px, 3vw, 42px);
-      line-height: 1.04;
-      letter-spacing: -.035em;
-    }
-    .hero-copy { color: #c5d2e4; font-size: 14px; max-width: 940px; line-height: 1.5; }
-    .scenario-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-    .pill {
-      border: 1px solid #30435e;
-      background: rgba(7,16,29,.55);
-      color: #d7e1ef;
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 11px;
-      font-weight: 650;
-    }
-
-    .machines {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 14px;
-    }
-    .machine {
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      padding: 17px 18px;
-      background: rgba(17,29,48,.88);
-      position: relative;
-      overflow: hidden;
-    }
-    .machine.ft { border-color: rgba(56,189,248,.42); box-shadow: inset 0 0 0 1px rgba(56,189,248,.06); }
-    .machine.comp { border-color: rgba(245,158,11,.35); }
-    .machine-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
-    .machine-name { font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
-    .machine.ft .machine-name { color: var(--ft); }
-    .machine.comp .machine-name { color: var(--comp); }
-    .machine-kicker { color: var(--muted); font-size: 11px; margin-top: 2px; }
-    .tag {
-      padding: 5px 8px;
-      border-radius: 999px;
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-    .ft .tag { background: var(--ft-soft); color: var(--ft); border: 1px solid rgba(56,189,248,.28); }
-    .comp .tag { background: var(--comp-soft); color: var(--comp); border: 1px solid rgba(245,158,11,.28); }
-    .machine-metrics {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 15px;
-    }
-    .mmetric {
-      border-top: 1px solid rgba(148,163,184,.16);
-      padding-top: 10px;
-    }
-    .mmetric-label { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .055em; }
-    .mmetric-value { font-size: 20px; font-weight: 780; margin-top: 3px; white-space: nowrap; }
-    .mmetric-unit { font-size: 11px; color: var(--muted); font-weight: 600; }
-
-    .kpis {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 14px;
-    }
-    .kpi {
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      padding: 16px 18px;
-      background: rgba(17,29,48,.84);
-    }
-    .kpi-label { color: var(--muted); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
-    .kpi-value { font-size: clamp(24px, 2.8vw, 35px); font-weight: 850; letter-spacing: -.035em; margin-top: 4px; }
-    .kpi-sub { color: #aebed1; font-size: 11px; margin-top: 4px; line-height: 1.35; }
-    .kpi.good .kpi-value { color: var(--good); }
-
-    .analysis-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.55fr) minmax(330px, .75fr);
-      gap: 14px;
-      margin-top: 14px;
-      align-items: stretch;
-    }
-    .card {
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: rgba(17,29,48,.86);
-      padding: 16px 18px;
-      min-width: 0;
-    }
-    .card-title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 9px; }
-    .card-title { font-size: 14px; font-weight: 800; }
-    .card-meta { color: var(--muted); font-size: 10px; }
-    .chart-shell {
-      height: 360px;
-      min-height: 320px;
-      border-radius: 12px;
-      overflow: hidden;
-      background: linear-gradient(180deg, rgba(7,16,29,.65), rgba(7,16,29,.28));
-      border: 1px solid rgba(148,163,184,.10);
-    }
-    #tcoChartSvg { display: block; width: 100%; height: 100%; }
-
-    .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 9px; }
-    .legend-item { display: flex; align-items: center; gap: 6px; color: #c9d5e4; font-size: 10px; }
-    .legend-line { width: 22px; height: 3px; border-radius: 999px; }
-
-    .snapshot-table { width: 100%; border-collapse: collapse; margin-top: 2px; }
-    .snapshot-table th, .snapshot-table td {
-      padding: 9px 7px;
-      border-bottom: 1px solid rgba(148,163,184,.13);
-      text-align: right;
-      font-size: 11px;
-      white-space: nowrap;
-    }
-    .snapshot-table th:first-child, .snapshot-table td:first-child { text-align: left; }
-    .snapshot-table th { color: var(--muted); text-transform: uppercase; font-size: 9px; letter-spacing: .05em; }
-    .row-ft td:first-child { color: var(--ft); font-weight: 800; }
-    .row-comp td:first-child { color: var(--comp); font-weight: 800; }
-    .row-saving td { color: var(--good); font-weight: 800; }
-
-
-    footer {
-      max-width: 1460px;
-      margin: 0 auto;
-      padding: 4px 22px 22px;
-      color: #6f829b;
-      font-size: 10px;
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    @media (max-width: 980px) {
-      .machines, .kpis, .analysis-grid { grid-template-columns: 1fr; }
-      .machine-metrics { grid-template-columns: repeat(3, 1fr); }
-      .chart-shell { height: 330px; }
-    }
-    @media (max-width: 620px) {
-      main { width: min(100% - 18px, 1460px); margin-top: 10px; }
-      .topbar-inner { padding: 10px 12px; }
-      .brand-sub { display: none; }
-      .hero { padding: 18px 16px; }
-      .machine-metrics { grid-template-columns: 1fr; }
-      .mmetric { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-      .mmetric-value { font-size: 18px; }
-    }
-
-    @page { size: A4 landscape; margin: 7mm; }
-    @media print {
-      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-      html, body { background: #fff !important; color: #0f172a !important; }
-      body { min-height: 0 !important; }
-      .topbar { position: static !important; background: #fff !important; border: 0 !important; backdrop-filter: none !important; }
-      .topbar-inner { max-width: none !important; padding: 0 0 4mm !important; }
-      .brand-mark { box-shadow: none !important; }
-      .brand-title { color: #0f172a !important; }
-      .brand-sub { color: #64748b !important; }
-      .btn { display: none !important; }
-      main { width: 100% !important; max-width: none !important; margin: 0 !important; }
-      .hero, .machine, .kpi, .card {
-        box-shadow: none !important;
-        background: #fff !important;
-        color: #0f172a !important;
-        break-inside: avoid !important;
-      }
-      .hero { padding: 4mm 5mm !important; border-color: #b6c3d2 !important; }
-      .hero::after { display: none !important; }
-      h1 { font-size: 21pt !important; margin: 1mm 0 !important; }
-      .hero-copy, .pill, .machine-kicker, .mmetric-label, .mmetric-unit, .kpi-label, .kpi-sub, .card-meta { color: #475569 !important; }
-      .scenario-pills { margin-top: 2mm !important; }
-      .pill { background: #f8fafc !important; border-color: #cbd5e1 !important; padding: 1mm 2mm !important; }
-      .machines, .kpis, .analysis-grid { gap: 2.3mm !important; margin-top: 2.3mm !important; }
-      .machines { grid-template-columns: 1fr 1fr !important; }
-      .kpis { grid-template-columns: repeat(3, 1fr) !important; }
-      .analysis-grid { grid-template-columns: 1.55fr .75fr !important; }
-      .machine, .kpi, .card { padding: 3mm !important; border-color: #cbd5e1 !important; }
-      .machine-metrics { margin-top: 2mm !important; gap: 2mm !important; }
-      .machine-name { font-size: 14pt !important; }
-      .mmetric-value { font-size: 12pt !important; }
-      .kpi-value { font-size: 19pt !important; }
-      .chart-shell { height: 88mm !important; min-height: 88mm !important; background: #fff !important; border-color: #e2e8f0 !important; }
-      #tcoChartSvg { background: #fff !important; }
-      .snapshot-table th, .snapshot-table td { padding: 1.7mm 1.3mm !important; font-size: 7.3pt !important; }
-      .snapshot-table th { font-size: 6.3pt !important; }
-      footer {
-        display: flex !important;
-        max-width: none !important;
-        padding: 2.3mm 0 0 !important;
-        margin: 0 !important;
-        color: #64748b !important;
-        font-size: 6.3pt !important;
-        border-top: 1px solid #e2e8f0 !important;
-      }
+    :root{--bg:#08111f;--panel:#111d30;--border:#24344c;--text:#f8fafc;--muted:#9fb0c7;--ft:#38bdf8;--comp:#f59e0b;--good:#34d399;--shadow:0 18px 50px rgba(0,0,0,.3)}
+    *{box-sizing:border-box}
+    html{background:var(--bg)}
+    body{margin:0;min-height:100vh;color:var(--text);background:radial-gradient(circle at 12% -10%,rgba(56,189,248,.15),transparent 34%),radial-gradient(circle at 90% 0%,rgba(245,158,11,.08),transparent 26%),linear-gradient(180deg,#07101d 0%,var(--bg) 55%,#070e19 100%);font-family:Inter,"Segoe UI",Tahoma,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+    .topbar{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);background:rgba(7,16,29,.86);border-bottom:1px solid rgba(56,189,248,.25)}
+    .topbar-inner{max-width:1460px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+    .brand{display:flex;align-items:center;gap:12px}.brand-mark{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;font-weight:800;background:linear-gradient(145deg,#38bdf8,#0284c7);box-shadow:0 0 24px rgba(56,189,248,.32)}
+    .brand-title{font-size:15px;font-weight:750}.brand-sub{font-size:11px;color:var(--muted);margin-top:2px}
+    .actions{display:flex;align-items:center;gap:8px}.lang-select{border:1px solid #30435e;border-radius:10px;padding:9px 10px;background:#0c1728;color:#fff;font-weight:700;outline:none;cursor:pointer}.btn{border:0;border-radius:10px;padding:10px 15px;color:#fff;background:linear-gradient(135deg,#0284c7,#38bdf8);font-weight:750;cursor:pointer;box-shadow:0 8px 22px rgba(2,132,199,.28)}
+    main{width:min(1460px,calc(100% - 32px));margin:24px auto 28px}
+    .hero{border:1px solid var(--border);border-radius:20px;padding:20px 24px;background:linear-gradient(120deg,rgba(56,189,248,.11),transparent 38%),linear-gradient(300deg,rgba(245,158,11,.06),transparent 35%),rgba(17,29,48,.86);box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .hero::after{content:"";position:absolute;width:280px;height:280px;right:-90px;top:-130px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.19),transparent 68%);pointer-events:none}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--ft);font-weight:800}
+    h1{margin:6px 0 5px;font-size:clamp(28px,3vw,42px);line-height:1.04;letter-spacing:-.035em}.hero-copy{color:#c5d2e4;font-size:14px;max-width:940px;line-height:1.5}.scenario-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.pill{border:1px solid #30435e;background:rgba(7,16,29,.55);color:#d7e1ef;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:650}
+    .machines{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.machine{border-radius:16px;border:1px solid var(--border);padding:16px 18px;background:rgba(17,29,48,.88)}.machine.ft{border-color:rgba(56,189,248,.42)}.machine.comp{border-color:rgba(245,158,11,.35)}.machine-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.machine-name{font-size:22px;font-weight:800}.machine.ft .machine-name{color:var(--ft)}.machine.comp .machine-name{color:var(--comp)}.machine-kicker{color:var(--muted);font-size:11px;margin-top:2px}.tag{padding:5px 8px;border-radius:999px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em}.ft .tag{background:rgba(56,189,248,.12);color:var(--ft);border:1px solid rgba(56,189,248,.28)}.comp .tag{background:rgba(245,158,11,.12);color:var(--comp);border:1px solid rgba(245,158,11,.28)}
+    .machine-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.mmetric{border-top:1px solid rgba(148,163,184,.16);padding-top:9px}.mmetric-label{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.055em}.mmetric-value{font-size:20px;font-weight:780;margin-top:3px;white-space:nowrap}.mmetric-unit{font-size:11px;color:var(--muted);font-weight:600}
+    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}.kpi{border-radius:16px;border:1px solid var(--border);padding:15px 18px;background:rgba(17,29,48,.84)}.kpi-label{color:var(--muted);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.kpi-value{font-size:clamp(24px,2.8vw,35px);font-weight:850;letter-spacing:-.035em;margin-top:4px}.kpi-sub{color:#aebed1;font-size:11px;margin-top:4px;line-height:1.35}.kpi.good .kpi-value{color:var(--good)}
+    .analysis-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(330px,.75fr);gap:14px;margin-top:14px}.card{border-radius:16px;border:1px solid var(--border);background:rgba(17,29,48,.86);padding:15px 18px;min-width:0}.card-title-row{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin-bottom:8px}.card-title{font-size:14px;font-weight:800}.card-meta{color:var(--muted);font-size:10px}.chart-shell{height:330px;min-height:300px;border-radius:12px;overflow:hidden;background:linear-gradient(180deg,rgba(7,16,29,.65),rgba(7,16,29,.28));border:1px solid rgba(148,163,184,.10)}#tcoChartSvg{display:block;width:100%;height:100%}.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}.legend-item{display:flex;align-items:center;gap:6px;color:#c9d5e4;font-size:10px}.legend-line{width:22px;height:3px;border-radius:999px}
+    .snapshot-table{width:100%;border-collapse:collapse;margin-top:2px}.snapshot-table th,.snapshot-table td{padding:9px 7px;border-bottom:1px solid rgba(148,163,184,.13);text-align:right;font-size:11px;white-space:nowrap}.snapshot-table th:first-child,.snapshot-table td:first-child{text-align:left}.snapshot-table th{color:var(--muted);text-transform:uppercase;font-size:9px;letter-spacing:.05em}.row-ft td:first-child{color:var(--ft);font-weight:800}.row-comp td:first-child{color:var(--comp);font-weight:800}.row-saving td{color:var(--good);font-weight:800}
+    footer{max-width:1460px;margin:0 auto;padding:4px 22px 22px;color:#6f829b;font-size:10px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    html[dir="rtl"] body{text-align:right}html[dir="rtl"] .brand{flex-direction:row-reverse}html[dir="rtl"] .topbar-inner,html[dir="rtl"] .machine-head,html[dir="rtl"] .card-title-row{direction:rtl}html[dir="rtl"] .snapshot-table th,html[dir="rtl"] .snapshot-table td{text-align:left}html[dir="rtl"] .snapshot-table th:first-child,html[dir="rtl"] .snapshot-table td:first-child{text-align:right}html[dir="rtl"] .scenario-pills,html[dir="rtl"] .legend{direction:rtl}html[dir="rtl"] footer{direction:rtl}
+    @media(max-width:980px){.machines,.kpis,.analysis-grid{grid-template-columns:1fr}.chart-shell{height:320px}}@media(max-width:620px){main{width:min(100% - 18px,1460px);margin-top:10px}.topbar-inner{padding:10px 12px}.brand-sub{display:none}.hero{padding:18px 16px}.machine-metrics{grid-template-columns:1fr}.mmetric{display:flex;align-items:baseline;justify-content:space-between;gap:12px}.mmetric-value{font-size:18px}.actions{gap:5px}.btn{padding:9px 10px}.lang-select{padding:8px 7px}}
+    @page{size:A4 landscape;margin:6mm}
+    @media print{
+      *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+      html,body{background:#fff!important;color:#0f172a!important;width:100%!important;height:auto!important;min-height:0!important;overflow:hidden!important}
+      .topbar{position:static!important;background:#fff!important;border:0!important;backdrop-filter:none!important}.topbar-inner{max-width:none!important;padding:0 0 2mm!important}.brand-mark{box-shadow:none!important;width:9mm!important;height:9mm!important}.brand-title{color:#0f172a!important;font-size:10pt!important}.brand-sub{color:#64748b!important;font-size:6.5pt!important}.actions{display:none!important}
+      main{width:100%!important;max-width:none!important;margin:0!important}.hero,.machine,.kpi,.card{box-shadow:none!important;background:#fff!important;color:#0f172a!important;break-inside:avoid!important;page-break-inside:avoid!important}.hero{padding:2.5mm 3.5mm!important;border-color:#b6c3d2!important;border-radius:3mm!important}.hero::after{display:none!important}.eyebrow{font-size:6.2pt!important}h1{font-size:17pt!important;margin:.5mm 0!important}.hero-copy{font-size:7pt!important;line-height:1.2!important}.scenario-pills{margin-top:1mm!important;gap:1mm!important}.pill{background:#f8fafc!important;border-color:#cbd5e1!important;padding:.65mm 1.5mm!important;font-size:6.2pt!important}
+      .machines,.kpis,.analysis-grid{gap:1.6mm!important;margin-top:1.6mm!important}.machines{grid-template-columns:1fr 1fr!important}.kpis{grid-template-columns:repeat(3,1fr)!important}.analysis-grid{grid-template-columns:1.55fr .75fr!important}.machine,.kpi,.card{padding:2mm 2.4mm!important;border-color:#cbd5e1!important;border-radius:2.5mm!important}.machine-name{font-size:11pt!important}.machine-kicker,.tag{font-size:6pt!important}.machine-metrics{margin-top:1mm!important;gap:1.5mm!important}.mmetric{padding-top:1mm!important}.mmetric-label{font-size:5.8pt!important}.mmetric-value{font-size:10pt!important}.mmetric-unit{font-size:6pt!important}.kpi-label{font-size:5.8pt!important}.kpi-value{font-size:15pt!important;margin-top:.5mm!important}.kpi-sub{font-size:5.8pt!important;margin-top:.4mm!important;line-height:1.15!important}.card-title-row{margin-bottom:1mm!important}.card-title{font-size:8pt!important}.card-meta{font-size:5.8pt!important}.chart-shell{height:67mm!important;min-height:67mm!important;background:#fff!important;border-color:#e2e8f0!important}.legend{margin-top:1mm!important;gap:2mm!important}.legend-item{font-size:5.8pt!important}.snapshot-table th,.snapshot-table td{padding:1.25mm 1mm!important;font-size:6.4pt!important}.snapshot-table th{font-size:5.8pt!important}footer{display:flex!important;max-width:none!important;padding:1.5mm 0 0!important;margin:1.3mm 0 0!important;color:#64748b!important;font-size:5.6pt!important;border-top:1px solid #e2e8f0!important}
     }
   </style>
 </head>
 <body>
   <header class="topbar">
     <div class="topbar-inner">
-      <div class="brand">
-        <div class="brand-mark">FT</div>
-        <div>
-          <div class="brand-title">Facultatieve Technologies</div>
-          <div class="brand-sub">TCO Decision Support</div>
-        </div>
-      </div>
-      <button class="btn" id="printBtn" type="button">Generate PDF Report</button>
+      <div class="brand"><div class="brand-mark">FT</div><div><div class="brand-title">Facultatieve Technologies</div><div class="brand-sub" data-i18n="brandSub">TCO Decision Support</div></div></div>
+      <div class="actions"><select class="lang-select" id="langSelect" aria-label="Language"><option value="en">English</option><option value="ar">العربية</option></select><button class="btn" id="printBtn" type="button" data-i18n="print">Generate PDF Report</button></div>
     </div>
   </header>
-
   <main>
     <section class="hero">
-      <div class="eyebrow">Fixed Commercial Comparison</div>
-      <h1>FT70 vs Average Competitor</h1>
-      <div class="hero-copy">
-        Simple cumulative TCO comparison between FT70 and an Average Competitor under one fixed commercial scenario.
-      </div>
-      <div class="scenario-pills">
-        <span class="pill">5,000 cremations / year</span>
-        <span class="pill">Gas price: €0.075/kWh</span>
-        <span class="pill">Fixed assumptions</span>
-      </div>
+      <div class="eyebrow" data-i18n="eyebrow">Fixed Commercial Comparison</div>
+      <h1><span>FTA70</span> <span data-i18n="versus">vs Average Competitor</span></h1>
+      <div class="hero-copy" data-i18n="heroCopy">Simple cumulative TCO comparison between FTA70 and an Average Competitor under one fixed commercial scenario.</div>
+      <div class="scenario-pills"><span class="pill" data-i18n="pillVolume">5,000 cremations / year</span><span class="pill" data-i18n="pillGas">Gas price: €0.075/kWh</span><span class="pill" data-i18n="pillFixed">Fixed assumptions</span></div>
     </section>
-
     <section class="machines">
-      <article class="machine ft">
-        <div class="machine-head">
-          <div>
-            <div class="machine-name">FT70</div>
-            <div class="machine-kicker">Facultatieve Technologies</div>
-          </div>
-          <div class="tag">FT70</div>
-        </div>
-        <div class="machine-metrics">
-          <div class="mmetric">
-            <div class="mmetric-label">Investment</div>
-            <div class="mmetric-value">€265,000</div>
-          </div>
-          <div class="mmetric">
-            <div class="mmetric-label">Gas consumption</div>
-            <div class="mmetric-value">80 <span class="mmetric-unit">kWh/crem.</span></div>
-          </div>
-          <div class="mmetric">
-            <div class="mmetric-label">Annual gas</div>
-            <div class="mmetric-value">400,000 <span class="mmetric-unit">kWh/year</span></div>
-          </div>
-        </div>
-      </article>
-
-      <article class="machine comp">
-        <div class="machine-head">
-          <div>
-            <div class="machine-name">Average Competitor</div>
-            <div class="machine-kicker">Market-average benchmark</div>
-          </div>
-          <div class="tag">Benchmark</div>
-        </div>
-        <div class="machine-metrics">
-          <div class="mmetric">
-            <div class="mmetric-label">Investment</div>
-            <div class="mmetric-value">€160,000</div>
-          </div>
-          <div class="mmetric">
-            <div class="mmetric-label">Gas consumption</div>
-            <div class="mmetric-value">120 <span class="mmetric-unit">kWh/crem.</span></div>
-          </div>
-          <div class="mmetric">
-            <div class="mmetric-label">Annual gas</div>
-            <div class="mmetric-value">600,000 <span class="mmetric-unit">kWh/year</span></div>
-          </div>
-        </div>
-      </article>
+      <article class="machine ft"><div class="machine-head"><div><div class="machine-name">FTA70</div><div class="machine-kicker">Facultatieve Technologies</div></div><div class="tag">FTA70</div></div><div class="machine-metrics"><div class="mmetric"><div class="mmetric-label" data-i18n="investment">Investment</div><div class="mmetric-value">€265,000</div></div><div class="mmetric"><div class="mmetric-label" data-i18n="gasConsumption">Gas consumption</div><div class="mmetric-value">80 <span class="mmetric-unit" data-i18n="kwhCrem">kWh/crem.</span></div></div><div class="mmetric"><div class="mmetric-label" data-i18n="annualGas">Annual gas</div><div class="mmetric-value">400,000 <span class="mmetric-unit" data-i18n="kwhYear">kWh/year</span></div></div></div></article>
+      <article class="machine comp"><div class="machine-head"><div><div class="machine-name" data-i18n="competitor">Average Competitor</div><div class="machine-kicker" data-i18n="benchmarkKicker">Market-average benchmark</div></div><div class="tag" data-i18n="benchmark">Benchmark</div></div><div class="machine-metrics"><div class="mmetric"><div class="mmetric-label" data-i18n="investment">Investment</div><div class="mmetric-value">€160,000</div></div><div class="mmetric"><div class="mmetric-label" data-i18n="gasConsumption">Gas consumption</div><div class="mmetric-value">120 <span class="mmetric-unit" data-i18n="kwhCrem">kWh/crem.</span></div></div><div class="mmetric"><div class="mmetric-label" data-i18n="annualGas">Annual gas</div><div class="mmetric-value">600,000 <span class="mmetric-unit" data-i18n="kwhYear">kWh/year</span></div></div></div></article>
     </section>
-
     <section class="kpis">
-      <article class="kpi good">
-        <div class="kpi-label">Break-even vs Average Competitor</div>
-        <div class="kpi-value" id="breakEvenValue">—</div>
-        <div class="kpi-sub">Recovery of the higher FT70 investment through lower gas consumption.</div>
-      </article>
-      <article class="kpi good">
-        <div class="kpi-label">25-Year TCO Difference</div>
-        <div class="kpi-value" id="saving25Value">—</div>
-        <div class="kpi-sub" id="tcoDifferenceSub">Cumulative difference between the two fixed TCO trajectories.</div>
-      </article>
-      <article class="kpi">
-        <div class="kpi-label">Annual Gas Reduction</div>
-        <div class="kpi-value" id="annualGasSavingValue">—</div>
-        <div class="kpi-sub" id="gasReductionSub">—</div>
-      </article>
+      <article class="kpi good"><div class="kpi-label" data-i18n="breakEvenLabel">Break-even vs Average Competitor</div><div class="kpi-value" id="breakEvenValue">—</div><div class="kpi-sub" data-i18n="breakEvenSub">Recovery of the higher FTA70 investment through lower gas consumption.</div></article>
+      <article class="kpi good"><div class="kpi-label" data-i18n="differenceLabel">25-Year TCO Difference</div><div class="kpi-value" id="saving25Value">—</div><div class="kpi-sub" id="tcoDifferenceSub">—</div></article>
+      <article class="kpi"><div class="kpi-label" data-i18n="avoidanceLabel">Annual Gas Consumption Avoidance</div><div class="kpi-value" id="annualGasSavingValue">—</div><div class="kpi-sub" id="gasReductionSub">—</div></article>
     </section>
-
     <section class="analysis-grid">
-      <article class="card">
-        <div class="card-title-row">
-          <div class="card-title">Cumulative TCO · 25 Years</div>
-          <div class="card-meta">Investment + gas operating cost</div>
-        </div>
-        <div class="chart-shell">
-          <svg id="tcoChartSvg" role="img" aria-label="Cumulative TCO chart comparing FT70 and Average Competitor"></svg>
-        </div>
-        <div class="legend">
-          <div class="legend-item"><span class="legend-line" style="background:#38bdf8"></span> FT70</div>
-          <div class="legend-item"><span class="legend-line" style="background:#f59e0b"></span> Average Competitor</div>
-          <div class="legend-item" id="breakEvenLegend"><span class="legend-line" style="background:#34d399; height:2px; border-top:1px dashed #34d399; background:transparent"></span> Break-even</div>
-        </div>
-      </article>
-
-      <aside class="card">
-        <div class="card-title-row">
-          <div class="card-title">TCO Snapshot</div>
-          <div class="card-meta">€ cumulative</div>
-        </div>
-        <table class="snapshot-table" aria-label="TCO snapshot by horizon">
-          <thead>
-            <tr>
-              <th>Technology</th>
-              <th>5Y</th>
-              <th>10Y</th>
-              <th>15Y</th>
-              <th>25Y</th>
-            </tr>
-          </thead>
-          <tbody id="snapshotBody"></tbody>
-        </table>
-
-      </aside>
+      <article class="card"><div class="card-title-row"><div class="card-title" data-i18n="chartTitle">Cumulative TCO · 25 Years</div><div class="card-meta" data-i18n="chartMeta">Investment + gas operating cost</div></div><div class="chart-shell"><svg id="tcoChartSvg" role="img"></svg></div><div class="legend"><div class="legend-item"><span class="legend-line" style="background:#38bdf8"></span> FTA70</div><div class="legend-item"><span class="legend-line" style="background:#f59e0b"></span> <span data-i18n="competitor">Average Competitor</span></div><div class="legend-item" id="breakEvenLegend"><span class="legend-line" style="background:transparent;height:2px;border-top:1px dashed #34d399"></span> <span data-i18n="breakEvenShort">Break-even</span></div></div></article>
+      <aside class="card"><div class="card-title-row"><div class="card-title" data-i18n="summaryTitle">TCO Summary</div><div class="card-meta" data-i18n="cumulativeEuro">€ cumulative</div></div><table class="snapshot-table"><thead><tr><th data-i18n="technology">Technology</th><th data-i18n="y5">5Y</th><th data-i18n="y10">10Y</th><th data-i18n="y15">15Y</th><th data-i18n="y25">25Y</th></tr></thead><tbody id="snapshotBody"></tbody></table></aside>
     </section>
   </main>
-
-  <footer>
-    <span>Facultatieve Technologies © 2026 · FT70 TCO Comparison</span>
-    <span>Assumptions: 5,000 cremations/year · Gas price €0.075/kWh · Fixed investment &amp; gas consumption</span>
-  </footer>
-
+  <footer><span data-i18n="footerLeft">Facultatieve Technologies © 2026 · FTA70 TCO Comparison</span><span data-i18n="footerRight">Assumptions: 5,000 cremations/year · Gas price €0.075/kWh · Fixed investment & gas consumption</span></footer>
   <script>
-    (() => {
-      'use strict';
-
-      const scenario = Object.freeze({
-        annualCremations: 5000,
-        ft70Capex: 265000,
-        competitorCapex: 160000,
-        ft70GasKwhPerCremation: 80,
-        competitorGasKwhPerCremation: 120,
-        gasPriceEurPerKwh: 0.075,
-        horizonYears: 25
-      });
-
-      const eur0 = new Intl.NumberFormat('en-GB', {
-        style: 'currency', currency: 'EUR', maximumFractionDigits: 0
-      });
-      const num1 = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 1 });
-      const num0 = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 0 });
-
-      const annualFt70Kwh = scenario.annualCremations * scenario.ft70GasKwhPerCremation;
-      const annualCompKwh = scenario.annualCremations * scenario.competitorGasKwhPerCremation;
-      const annualSavingKwh = annualCompKwh - annualFt70Kwh;
-      const reductionPct = annualSavingKwh / annualCompKwh * 100;
-
-      const years = [0];
-      const ft70 = [scenario.ft70Capex];
-      const competitor = [scenario.competitorCapex];
-      const savings = [scenario.competitorCapex - scenario.ft70Capex];
-
-      let ftCum = scenario.ft70Capex;
-      let compCum = scenario.competitorCapex;
-
-      const annualFt70GasCost = annualFt70Kwh * scenario.gasPriceEurPerKwh;
-      const annualCompGasCost = annualCompKwh * scenario.gasPriceEurPerKwh;
-
-      for (let i = 0; i < scenario.horizonYears; i++) {
-        ftCum += annualFt70GasCost;
-        compCum += annualCompGasCost;
-        years.push(i + 1);
-        ft70.push(ftCum);
-        competitor.push(compCum);
-        savings.push(compCum - ftCum);
-      }
-
-      function computeBreakEven() {
-        for (let y = 1; y < savings.length; y++) {
-          if (savings[y] >= 0 && savings[y - 1] < 0) {
-            const annualSaving = savings[y] - savings[y - 1];
-            const fraction = annualSaving > 0 ? (-savings[y - 1] / annualSaving) : 0;
-            return (y - 1) + fraction;
-          }
-        }
-        return null;
-      }
-
-      const breakEven = computeBreakEven();
-      const saving25 = savings[25];
-
-      document.getElementById('breakEvenValue').textContent =
-        breakEven == null ? 'Not reached within 25 years' : `${num1.format(breakEven)} years`;
-      document.getElementById('saving25Value').textContent =
-        saving25 >= 0 ? `${eur0.format(saving25)} saving` : `${eur0.format(Math.abs(saving25))} higher`;
-      document.getElementById('tcoDifferenceSub').textContent =
-        saving25 >= 0
-          ? 'FT70 cumulative TCO advantage at Year 25.'
-          : 'FT70 remains above the Average Competitor at Year 25.';
-      document.getElementById('annualGasSavingValue').textContent = `${num0.format(annualSavingKwh)} kWh/year`;
-      document.getElementById('gasReductionSub').textContent = `${num1.format(reductionPct)}% lower gas consumption with FT70.`;
-      const breakEvenLegend = document.getElementById('breakEvenLegend');
-      if (breakEvenLegend && breakEven == null) breakEvenLegend.style.display = 'none';
-
-      const horizons = [5, 10, 15, 25];
-      const tbody = document.getElementById('snapshotBody');
-      const row = (label, cls, data) => `
-        <tr class="${cls}">
-          <td>${label}</td>
-          ${data.map(v => `<td>${eur0.format(v)}</td>`).join('')}
-        </tr>`;
-      tbody.innerHTML =
-        row('FT70', 'row-ft', horizons.map(h => ft70[h])) +
-        row('Average Competitor', 'row-comp', horizons.map(h => competitor[h])) +
-        row('FT70 Saving', 'row-saving', horizons.map(h => savings[h]));
-
-      function drawChart() {
-        const svg = document.getElementById('tcoChartSvg');
-        const box = svg.getBoundingClientRect();
-        const width = Math.max(780, Math.round(box.width || 900));
-        const height = Math.max(320, Math.round(box.height || 360));
-        const pad = { left: 72, right: 24, top: 24, bottom: 48 };
-        const plotW = width - pad.left - pad.right;
-        const plotH = height - pad.top - pad.bottom;
-        const maxYRaw = Math.max(...ft70, ...competitor);
-        const tickStep = maxYRaw <= 1500000 ? 250000 : 500000;
-        const maxY = Math.ceil(maxYRaw / tickStep) * tickStep;
-
-        const x = yr => pad.left + (yr / 25) * plotW;
-        const y = val => pad.top + plotH - (val / maxY) * plotH;
-        const points = arr => arr.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
-        const fmtAxis = val => val >= 1000000 ? `€${(val/1000000).toFixed(val % 1000000 ? 1 : 0)}M` : `€${Math.round(val/1000)}k`;
-
-        const isPrint = window.matchMedia && window.matchMedia('print').matches;
-        const grid = isPrint ? '#d9e1ea' : '#26364d';
-        const axisText = isPrint ? '#64748b' : '#8fa2bb';
-        const bg = isPrint ? '#ffffff' : 'transparent';
-
-        let content = `<rect width="${width}" height="${height}" fill="${bg}"/>`;
-
-        for (let val = 0; val <= maxY; val += tickStep) {
-          const yy = y(val);
-          content += `<line x1="${pad.left}" y1="${yy}" x2="${width-pad.right}" y2="${yy}" stroke="${grid}" stroke-width="1"/>`;
-          content += `<text x="${pad.left-10}" y="${yy+4}" text-anchor="end" font-size="10" fill="${axisText}">${fmtAxis(val)}</text>`;
-        }
-
-        [0,5,10,15,20,25].forEach(yr => {
-          const xx = x(yr);
-          content += `<line x1="${xx}" y1="${pad.top}" x2="${xx}" y2="${pad.top+plotH}" stroke="${grid}" stroke-width="1" stroke-dasharray="2 5" opacity=".65"/>`;
-          content += `<text x="${xx}" y="${height-20}" text-anchor="middle" font-size="10" fill="${axisText}">${yr === 0 ? 'CAPEX' : `Year ${yr}`}</text>`;
-        });
-
-        content += `<polyline points="${points(ft70)}" fill="none" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;
-        content += `<polyline points="${points(competitor)}" fill="none" stroke="#f59e0b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;
-
-        if (breakEven != null) {
-          const beX = x(breakEven);
-          const beY = y(
-            ft70[Math.floor(breakEven)] +
-            (ft70[Math.ceil(breakEven)] - ft70[Math.floor(breakEven)]) * (breakEven - Math.floor(breakEven))
-          );
-          content += `<line x1="${beX}" y1="${pad.top}" x2="${beX}" y2="${pad.top+plotH}" stroke="#34d399" stroke-width="2" stroke-dasharray="7 5"/>`;
-          content += `<circle cx="${beX}" cy="${beY}" r="5" fill="#34d399" stroke="${isPrint ? '#ffffff' : '#08111f'}" stroke-width="2"/>`;
-          const labelX = Math.min(beX + 10, width - 190);
-          const labelY = Math.max(pad.top + 18, beY - 14);
-          content += `<rect x="${labelX}" y="${labelY-15}" width="150" height="25" rx="7" fill="${isPrint ? '#ecfdf5' : '#0d2b27'}" stroke="#34d399" stroke-width="1"/>`;
-          content += `<text x="${labelX+9}" y="${labelY+2}" font-size="10" font-weight="700" fill="${isPrint ? '#047857' : '#6ee7b7'}">Break-even · ${num1.format(breakEven)} years</text>`;
-        }
-
-        const endX = x(25);
-        content += `<circle cx="${endX}" cy="${y(ft70[25])}" r="4" fill="#38bdf8"/>`;
-        content += `<circle cx="${endX}" cy="${y(competitor[25])}" r="4" fill="#f59e0b"/>`;
-
-        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
-        svg.innerHTML = content;
-      }
-
-      drawChart();
-      window.addEventListener('resize', drawChart);
-
-      window.addEventListener('beforeprint', () => {
-        drawChart();
-      });
-      window.addEventListener('afterprint', () => {
-        requestAnimationFrame(drawChart);
-      });
-
-      document.getElementById('printBtn').addEventListener('click', () => {
-        drawChart();
-        requestAnimationFrame(() => window.print());
-      });
-    })();
+  (()=>{
+    'use strict';
+    const i18n={
+      en:{brandSub:'TCO Decision Support',print:'Generate PDF Report',eyebrow:'Fixed Commercial Comparison',versus:'vs Average Competitor',heroCopy:'Simple cumulative TCO comparison between FTA70 and an Average Competitor under one fixed commercial scenario.',pillVolume:'5,000 cremations / year',pillGas:'Gas price: €0.075/kWh',pillFixed:'Fixed assumptions',investment:'Investment',gasConsumption:'Gas consumption',annualGas:'Annual gas',kwhCrem:'kWh/crem.',kwhYear:'kWh/year',competitor:'Average Competitor',benchmarkKicker:'Market-average benchmark',benchmark:'Benchmark',breakEvenLabel:'Break-even vs Average Competitor',breakEvenSub:'Recovery of the higher FTA70 investment through lower gas consumption.',differenceLabel:'25-Year TCO Difference',avoidanceLabel:'Annual Gas Consumption Avoidance',chartTitle:'Cumulative TCO · 25 Years',chartMeta:'Investment + gas operating cost',breakEvenShort:'Break-even',summaryTitle:'TCO Summary',cumulativeEuro:'€ cumulative',technology:'Technology',y5:'5Y',y10:'10Y',y15:'15Y',y25:'25Y',footerLeft:'Facultatieve Technologies © 2026 · FTA70 TCO Comparison',footerRight:'Assumptions: 5,000 cremations/year · Gas price €0.075/kWh · Fixed investment & gas consumption',years:'years',saving:'saving',higher:'higher',differencePositive:'FTA70 cumulative TCO advantage at Year 25.',differenceNegative:'FTA70 remains above the Average Competitor at Year 25.',lowerGas:p=>`${p}% lower gas consumption with FTA70.`,rowSaving:'FTA70 Saving',year:n=>`Year ${n}`,capex:'CAPEX',breakEvenChart:v=>`Break-even · ${v} years`},
+      ar:{brandSub:'دعم قرارات التكلفة الإجمالية للملكية',print:'إنشاء تقرير PDF',eyebrow:'مقارنة تجارية ثابتة',versus:'مقابل متوسط المنافسين',heroCopy:'مقارنة مبسطة للتكلفة الإجمالية التراكمية للملكية بين FTA70 ومتوسط المنافسين وفق سيناريو تجاري ثابت.',pillVolume:'5,000 عملية حرق / سنة',pillGas:'سعر الغاز: 0.075 يورو/كيلوواط ساعة',pillFixed:'افتراضات ثابتة',investment:'الاستثمار',gasConsumption:'استهلاك الغاز',annualGas:'استهلاك الغاز السنوي',kwhCrem:'كيلوواط ساعة/عملية',kwhYear:'كيلوواط ساعة/سنة',competitor:'متوسط المنافسين',benchmarkKicker:'معيار متوسط السوق',benchmark:'معيار مرجعي',breakEvenLabel:'نقطة التعادل مقابل متوسط المنافسين',breakEvenSub:'استرداد فرق الاستثمار الأعلى في FTA70 من خلال انخفاض استهلاك الغاز.',differenceLabel:'فرق التكلفة الإجمالية خلال 25 عامًا',avoidanceLabel:'الوفر السنوي في استهلاك الغاز',chartTitle:'التكلفة الإجمالية التراكمية · 25 عامًا',chartMeta:'الاستثمار + تكلفة تشغيل الغاز',breakEvenShort:'نقطة التعادل',summaryTitle:'ملخص التكلفة الإجمالية',cumulativeEuro:'إجمالي تراكمي باليورو',technology:'التقنية',y5:'5 سنوات',y10:'10 سنوات',y15:'15 سنة',y25:'25 سنة',footerLeft:'Facultatieve Technologies © 2026 · مقارنة التكلفة الإجمالية FTA70',footerRight:'الافتراضات: 5,000 عملية حرق/سنة · سعر الغاز 0.075 يورو/كيلوواط ساعة · الاستثمار واستهلاك الغاز ثابتان',years:'سنوات',saving:'وفر',higher:'أعلى',differencePositive:'ميزة تراكمية في التكلفة الإجمالية لصالح FTA70 في السنة 25.',differenceNegative:'تبقى التكلفة الإجمالية لـ FTA70 أعلى من متوسط المنافسين في السنة 25.',lowerGas:p=>`استهلاك غاز أقل بنسبة ${p}% مع FTA70.`,rowSaving:'وفورات FTA70',year:n=>`السنة ${n}`,capex:'الاستثمار',breakEvenChart:v=>`نقطة التعادل · ${v} سنوات`}
+    };
+    const scenario=Object.freeze({annualCremations:5000,fta70Capex:265000,competitorCapex:160000,fta70GasKwhPerCremation:80,competitorGasKwhPerCremation:120,gasPriceEurPerKwh:.075,horizonYears:25});
+    let lang='en';
+    const fmtCurrency=v=>new Intl.NumberFormat(lang==='ar'?'ar-AE':'en-GB',{style:'currency',currency:'EUR',maximumFractionDigits:0,numberingSystem:'latn'}).format(v);
+    const fmt1=v=>new Intl.NumberFormat(lang==='ar'?'ar-AE':'en-GB',{maximumFractionDigits:1,numberingSystem:'latn'}).format(v);
+    const fmt0=v=>new Intl.NumberFormat(lang==='ar'?'ar-AE':'en-GB',{maximumFractionDigits:0,numberingSystem:'latn'}).format(v);
+    const annualFta70Kwh=scenario.annualCremations*scenario.fta70GasKwhPerCremation,annualCompKwh=scenario.annualCremations*scenario.competitorGasKwhPerCremation,annualSavingKwh=annualCompKwh-annualFta70Kwh,reductionPct=annualSavingKwh/annualCompKwh*100;
+    const years=[0],fta70=[scenario.fta70Capex],competitor=[scenario.competitorCapex],savings=[scenario.competitorCapex-scenario.fta70Capex];let ftCum=scenario.fta70Capex,compCum=scenario.competitorCapex;const annualFta70GasCost=annualFta70Kwh*scenario.gasPriceEurPerKwh,annualCompGasCost=annualCompKwh*scenario.gasPriceEurPerKwh;
+    for(let i=0;i<scenario.horizonYears;i++){ftCum+=annualFta70GasCost;compCum+=annualCompGasCost;years.push(i+1);fta70.push(ftCum);competitor.push(compCum);savings.push(compCum-ftCum)}
+    const breakEven=(()=>{for(let y=1;y<savings.length;y++){if(savings[y]>=0&&savings[y-1]<0){const d=savings[y]-savings[y-1],f=d>0?-savings[y-1]/d:0;return(y-1)+f}}return null})();
+    const saving25=savings[25];
+    function applyLanguage(){const t=i18n[lang];document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(t[k]!=null)el.textContent=t[k]});renderValues();drawChart()}
+    function renderValues(){const t=i18n[lang];document.getElementById('breakEvenValue').textContent=breakEven==null?'—':`${fmt1(breakEven)} ${t.years}`;document.getElementById('saving25Value').textContent=saving25>=0?`${fmtCurrency(saving25)} ${t.saving}`:`${fmtCurrency(Math.abs(saving25))} ${t.higher}`;document.getElementById('tcoDifferenceSub').textContent=saving25>=0?t.differencePositive:t.differenceNegative;document.getElementById('annualGasSavingValue').textContent=`${fmt0(annualSavingKwh)} ${t.kwhYear}`;document.getElementById('gasReductionSub').textContent=t.lowerGas(fmt1(reductionPct));const horizons=[5,10,15,25],tbody=document.getElementById('snapshotBody'),row=(label,cls,data)=>`<tr class="${cls}"><td>${label}</td>${data.map(v=>`<td>${fmtCurrency(v)}</td>`).join('')}</tr>`;tbody.innerHTML=row('FTA70','row-ft',horizons.map(h=>fta70[h]))+row(t.competitor,'row-comp',horizons.map(h=>competitor[h]))+row(t.rowSaving,'row-saving',horizons.map(h=>savings[h]))}
+    function drawChart(){const t=i18n[lang],svg=document.getElementById('tcoChartSvg'),box=svg.getBoundingClientRect(),width=Math.max(760,Math.round(box.width||900)),height=Math.max(300,Math.round(box.height||330)),pad={left:72,right:24,top:22,bottom:44},plotW=width-pad.left-pad.right,plotH=height-pad.top-pad.bottom,maxYRaw=Math.max(...fta70,...competitor),tickStep=maxYRaw<=1500000?250000:500000,maxY=Math.ceil(maxYRaw/tickStep)*tickStep,x=yr=>pad.left+(yr/25)*plotW,y=val=>pad.top+plotH-(val/maxY)*plotH,points=arr=>arr.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' '),fmtAxis=val=>val>=1000000?`€${(val/1000000).toFixed(val%1000000?1:0)}M`:`€${Math.round(val/1000)}k`,isPrint=window.matchMedia&&window.matchMedia('print').matches,grid=isPrint?'#d9e1ea':'#26364d',axisText=isPrint?'#64748b':'#8fa2bb',bg=isPrint?'#fff':'transparent';let c=`<rect width="${width}" height="${height}" fill="${bg}"/>`;for(let val=0;val<=maxY;val+=tickStep){const yy=y(val);c+=`<line x1="${pad.left}" y1="${yy}" x2="${width-pad.right}" y2="${yy}" stroke="${grid}" stroke-width="1"/><text x="${pad.left-10}" y="${yy+4}" text-anchor="end" font-size="10" fill="${axisText}">${fmtAxis(val)}</text>`}[0,5,10,15,20,25].forEach(yr=>{const xx=x(yr),label=yr===0?t.capex:t.year(yr);c+=`<line x1="${xx}" y1="${pad.top}" x2="${xx}" y2="${pad.top+plotH}" stroke="${grid}" stroke-width="1" stroke-dasharray="2 5" opacity=".65"/><text x="${xx}" y="${height-18}" text-anchor="middle" font-size="10" fill="${axisText}">${label}</text>`});c+=`<polyline points="${points(fta70)}" fill="none" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><polyline points="${points(competitor)}" fill="none" stroke="#f59e0b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;if(breakEven!=null){const beX=x(breakEven),lo=Math.floor(breakEven),hi=Math.ceil(breakEven),beY=y(fta70[lo]+(fta70[hi]-fta70[lo])*(breakEven-lo)),labelX=Math.min(beX+10,width-190),labelY=Math.max(pad.top+18,beY-14);c+=`<line x1="${beX}" y1="${pad.top}" x2="${beX}" y2="${pad.top+plotH}" stroke="#34d399" stroke-width="2" stroke-dasharray="7 5"/><circle cx="${beX}" cy="${beY}" r="5" fill="#34d399" stroke="${isPrint?'#fff':'#08111f'}" stroke-width="2"/><rect x="${labelX}" y="${labelY-15}" width="165" height="25" rx="7" fill="${isPrint?'#ecfdf5':'#0d2b27'}" stroke="#34d399"/><text x="${labelX+9}" y="${labelY+2}" font-size="10" font-weight="700" fill="${isPrint?'#047857':'#6ee7b7'}">${t.breakEvenChart(fmt1(breakEven))}</text>`}const endX=x(25);c+=`<circle cx="${endX}" cy="${y(fta70[25])}" r="4" fill="#38bdf8"/><circle cx="${endX}" cy="${y(competitor[25])}" r="4" fill="#f59e0b"/>`;svg.setAttribute('viewBox',`0 0 ${width} ${height}`);svg.innerHTML=c}
+    document.getElementById('langSelect').addEventListener('change',e=>{lang=e.target.value;applyLanguage()});window.addEventListener('resize',drawChart);window.addEventListener('beforeprint',drawChart);window.addEventListener('afterprint',()=>requestAnimationFrame(drawChart));document.getElementById('printBtn').addEventListener('click',()=>{drawChart();requestAnimationFrame(()=>window.print())});applyLanguage();
+  })();
   </script>
 </body>
 </html>
